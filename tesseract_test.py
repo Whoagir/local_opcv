@@ -9,6 +9,8 @@ pytesseract.pytesseract.tesseract_cmd = r'D:\)\tesseract.exe'
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+# Есть 2 варианта: 1 варинант лучше с числами работает, но все равно не то, что нужно, 2 варинат дает лучшше изображение, т.е. хорошо обрабатывается больше карт и чисел
+# А проблему с засветами у меня пофиксить не получилось
 
 # def black_white_change(crop, base_threshold=165, threshold_adjustment_factor=1.0, brightness_range=(63, 78),
 #                        brightness_reduction_factor=1.5):
