@@ -8,9 +8,8 @@ from config import *
 # Данные индикаторных областей: [id, top, bottom, width, height, rotation, description]
 
 
-
 # Путь к снимкам
-_fmask = r"res/photo/screen_1.png"
+_fmask = r"res/photo/screenn_11.png"
 image_files = glob.glob(_fmask, recursive=True)  # Получение списка файлов
 
 # Настройка отображения
@@ -23,10 +22,14 @@ _img = mpimg.imread(image_files[0])  # Чтение первого изобра�
 _img = np.clip(_img, 0, 1) if _img.dtype.kind == 'f' else np.clip(_img, 0, 255) / 255.0
 
 # Добавление индикаторных областей
-for id, x, y, w, h, a, description in indicator_areas:
-    ax.add_patch(
-        Rectangle((x, y), w, h, edgecolor="#f00", facecolor="blue", fill=False, lw=1)
-    )
+for section_key, section in indicator_sections.items():
+    for area in section.areas:
+        ax.add_patch(
+            Rectangle(
+                (area.x, area.y), area.width, area.height,
+                edgecolor="#f00", facecolor="blue", fill=False, lw=1
+            )
+        )
 
 ax.imshow(_img)
 plt.show()
