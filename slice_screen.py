@@ -11,7 +11,11 @@ if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
 # Открытие видеофайла
+<<<<<<< HEAD
 video = cv2.VideoCapture('res/video/C0023.mp4')
+=======
+video = cv2.VideoCapture('res/video/0023.mp4')
+>>>>>>> main
 
 # Проверка: открыт ли файл
 if not video.isOpened():

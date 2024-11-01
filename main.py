@@ -83,6 +83,7 @@ def del_zone(crop):
     # Создаем пример черно-белого изображения с черной областью слева
 
 
+<<<<<<< HEAD
 def process_frame(frame, save_path=None):
     # Проверка на количество каналов
     if frame.shape[2] < 3:
@@ -114,6 +115,52 @@ def process_frame(frame, save_path=None):
             # Вставка области в сшитое изображение
             stitched_image[current_y:current_y + area.height, :area.width, :] = cropped_area
             current_y += area.height
+=======
+def process_frame(frame, save_path=output_dir):
+
+    # plt.imshow(frame, cmap='gray', vmin=0, vmax=255)
+    # plt.axis('off')  # Скрываем оси
+    # plt.show()
+
+    # Убедитесь, что у вас есть 3 канала
+    if frame.shape[2] < 3:
+        raise ValueError("Ожидается как минимум три канала в изображении (RGB или RGBA).")
+
+    # Создание пустого изображения
+    max_width = max(area[3] for area in indicator_areas)
+    total_height = sum(area[4] for area in indicator_areas)
+
+    # Обеспечение соответствия количества каналов
+    stitched_image = np.ones((total_height, max_width, 4))  # RGBA
+
+    current_y = 0  # Изменяем переменную оси на Y для вертикальной компоновки
+
+    number_img_list = [indicator_areas[i] for i in range(len(indicator_areas)) if i % 12 in (0, 1, 2, 3, 4, 5)]
+
+    for id, x, y, w, h, a, description in number_img_list:
+        cropped_area = frame[y:y + h, x:x + w]
+
+        # plt.imshow(cropped_area, cmap='gray', vmin=0, vmax=255)
+        # plt.axis('off')  # Скрываем оси
+        # plt.show()
+
+        cropped_area = black_white_change(cropped_area)
+
+        cropped_area = del_zone(cropped_area)
+
+        # Предполагается, что black_white_change и del_zone возвращают одноканальное изображение
+        cropped_area = np.stack((cropped_area,) * 3, axis=-1)
+
+        alpha_channel = np.ones((h, w, 1), dtype=cropped_area.dtype) * 255
+        cropped_area = np.concatenate((cropped_area, alpha_channel), axis=2)
+
+        stitched_image[current_y:current_y + h, 0:w, :] = cropped_area
+        current_y += h
+
+    # Визуализация перед сохранением (как отладочная мера)
+    # plt.imshow(stitched_image / 255.0)
+    # plt.show()
+>>>>>>> main
 
     # Обрезка изображения, если это нужно
     stitched_image = stitched_image[:, :81, :]
@@ -122,16 +169,27 @@ def process_frame(frame, save_path=None):
     stitched_image_rgb = cv2.cvtColor(stitched_image.astype(np.uint8), cv2.COLOR_RGBA2RGB)
 
     # Сохранение изображения
+<<<<<<< HEAD
     if save_path:
         cv2.imwrite(save_path, stitched_image)
 
     # Распознавание текста с помощью Tesseract
+=======
+    cv2.imwrite('test_image.png', stitched_image)
+
+    # Распознаём текст с помощью Tesseract
+>>>>>>> main
     text = pytesseract.image_to_string(stitched_image_rgb, config='--psm 6 -c tessedit_char_whitelist=0123456789,. ')
 
     return text
 
+<<<<<<< HEAD
 
 def main():
+=======
+def main():
+
+>>>>>>> main
     video_path = "res/video/0023.mp4"  # Путь к вашему видео
     cap = cv2.VideoCapture(video_path)
 
